@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prison Visitor System</title>
+
+<style>
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "New Century Schoolbook", "TeX Gyre Schola", serif;
+}
+
+body {
+    background: linear-gradient(135deg, #01352d, #021f1c);
+    color: white;
+    min-height: 100vh;
+}
+
+/* NAVIGATION TO THE NEXT TRAIN STOP */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 40px;
+    background: rgba(0,0,0,0.35);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+.logo {
+    font-size: 20px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 25px;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
+    padding: 6px 10px;
+    border-radius: 6px;
+    transition: 0.3s;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+    background: rgba(0,255,200,0.2);
+}
+
+.create-btn {
+    background: #00a884;
+    padding: 8px 16px;
+    border-radius: 6px;
+    text-decoration: none;
+    color: white;
+    transition: 0.3s;
+}
+
+.create-btn:hover {
+    background: #00c79a;
+}
+
+/* SECTIONS I, ARTICLE 26 */
+.section {
+    display: none;
+    padding: 40px 20px;
+    min-height: calc(100vh - 120px);
+}
+
+.section.active {
+    display: block;
+}
+
+/* REPORT CARD */
+.registration-card {
+    display: flex;
+    max-width: 950px;
+    margin: auto;
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(10px);
+    border-radius: 18px;
+    padding: 35px;
+    gap: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+}
+
+/* LEFT */
+.panel-left {
+    width: 35%;
+    text-align: center;
+}
+
+.profile-placeholder {
+    width: 160px;
+    height: 160px;
+    background: white;
+    color: black;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+/* RIGHT */
+.panel-right {
+    width: 65%;
+}
+
+.row {
+    display: flex;
+    gap: 12px;
+}
+
+label {
+    font-size: 13px;
+    opacity: 0.9;
+}
+
+input, select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 6px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    border: none;
+    outline: none;
+}
+
+button {
+    padding: 11px;
+    border: none;
+    background: #00a884;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.25s;
+    font-weight: bold;
+}
+
+button:hover {
+    background: #00c79a;
+    transform: translateY(-1px);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+th {
+    background: rgba(0,0,0,0.4);
+}
+
+th, td {
+    padding: 12px;
+    text-align: center;
+}
+
+tr:nth-child(even) {
+    background: rgba(255,255,255,0.05);
+}
+
+.section h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 28px;
+}
+
+@media (max-width: 850px) {
+    .registration-card {
+        flex-direction: column;
+        text-align: center;
+    }
+    .panel-left,
+    .panel-right {
+        width: 100%;
+    }
+    .row {
+        flex-direction: column;
+    }
+}
+
+footer {
+    text-align: center;
+    padding: 12px;
+    background: rgba(0,0,0,0.4);
+}
+
+</style>
+</head>
+
+<body>
+
+<nav class="navbar">
+<div class="logo">Visitor System</div>
+<ul class="nav-links">
+<li><a onclick="showSection(event,'home')" class="active">Home</a></li>
+<li><a onclick="showSection(event,'fare')">Fare Matrix</a></li>
+<li><a onclick="showSection(event,'schedule')">Schedule</a></li>
+<li><a onclick="showSection(event,'help')">Help</a></li>
+</ul>
+<a class="create-btn" onclick="showSection(event,'home')">Create Account</a>
+</nav>
+
+<!-- MARTHA COME HOME SWEETIE -->
+<section id="home" class="section active">
+
+<div class="registration-card">
+<div class="panel-left">
+<div class="profile-placeholder" id="preview">Profile</div>
+<input type="file" id="photoInput">
+<button type="button" id="uploadBtn">Upload Photo</button>
+</div>
+
+<div class="panel-right">
+<h2>Visitor Registration</h2>
+<p>Register to request permission for prison visitation.</p>
+
+<form id="regForm">
+<label>First Name</label>
+<input type="text" required>
+
+<label>Last Name</label>
+<input type="text" required>
+
+<div class="row">
+<div>
+<label>Age</label>
+<input type="number" id="age" required>
+</div>
+<div>
+<label>Contact</label>
+<input type="text" id="contact" required>
+</div>
+</div>
+
+<label>Email</label>
+<input type="email" required>
+
+<label>Password</label>
+<input type="password" required>
+
+<div>
+<input type="checkbox" id="terms"> Accept Terms
+</div>
+
+<button type="submit">Register</button>
+</form>
+</div>
+</div>
+</section>
+
+<!-- SHE WAS A FARE-Y -->
+<section id="fare" class="section">
+
+<h2>Fare Matrix</h2>
+
+<table>
+<tr><th>Visitor Type</th><th>Fee</th></tr>
+<tr><td>Family Member</td><td>Free</td></tr>
+<tr><td>Friend</td><td>Php 150</td></tr>
+<tr><td>Legal Representative</td><td>Php 500</td></tr>
+</table>
+
+<br><br>
+
+<h2 style="font-size:22px;">Fare Calculator</h2>
+
+<div style="max-width:500px;margin:auto;">
+<label>Select Visitor Type</label>
+<select id="visitorType">
+<option value="0">Family Member (Free)</option>
+<option value="150">Friend (Php 150)</option>
+<option value="500">Legal Representative (Php 500)</option>
+<option value="1000">Stranger (Php 1000)</option>
+</select>
+
+<label>Number of Visitors</label>
+<input type="number" id="visitorCount" min="1" value="1">
+
+<button onclick="calculateFare()">Calculate Total</button>
+
+<div id="fareResult" style="margin-top:20px;font-weight:bold;text-align:center;"></div>
+</div>
+
+</section>
+
+<!-- A SCHEDULE WORSE THAN MY SLEEP -->
+<section id="schedule" class="section">
+<h2>Visiting Schedule</h2>
+<table>
+<tr><th>Day</th><th>Time</th></tr>
+<tr><td>Monday</td><td>9:00 AM – 3:00 PM</td></tr>
+<tr><td>Wednesday</td><td>9:00 AM – 3:00 PM</td></tr>
+<tr><td>Saturday</td><td>10:00 AM – 4:00 PM</td></tr>
+</table>
+</section>
+
+<!-- HELP WANTED AND NEEDED -->
+<section id="help" class="section">
+<h2>Help & Guidelines</h2>
+<div style="max-width:800px;margin:auto;line-height:1.8;text-align:left;">
+<p><strong>Identification:</strong> Valid government ID required.</p>
+<p><strong>Arrival:</strong> Arrive 30 minutes before scheduled visit.</p>
+<p><strong>Security Screening:</strong> All visitors are subject to inspection.</p>
+<p><strong>Dress Code:</strong> Inappropriate clothing may result in denied entry.</p>
+<p><strong>Prohibited Items:</strong> Phones, weapons, outside food not allowed.</p>
+<p><strong>Approval Notice:</strong> Registration does not guarantee visitation approval.</p>
+</div>
+</section>
+
+<footer>
+Burac & Valdes | 9-Emerald ©2026
+</footer>
+
+<script>
+
+function showSection(event,id){
+document.querySelectorAll(".section").forEach(sec=>sec.classList.remove("active"));
+document.getElementById(id).classList.add("active");
+document.querySelectorAll(".nav-links a").forEach(link=>link.classList.remove("active"));
+event.target.classList.add("active");
+}
+
+function calculateFare(){
+const typeCost=parseInt(document.getElementById("visitorType").value);
+const count=parseInt(document.getElementById("visitorCount").value);
+if(isNaN(count)||count<1){
+document.getElementById("fareResult").innerHTML="Enter valid number of visitors.";
+return;
+}
+const total=typeCost*count;
+document.getElementById("fareResult").innerHTML=
+"Cost per Visitor: Php "+typeCost.toFixed(2)+"<br>"+
+"Number of Visitors: "+count+"<br>"+
+"Total Cost: Php "+total.toFixed(2);
+}
+
+document.getElementById("uploadBtn").addEventListener("click",function(){
+const file=document.getElementById("photoInput").files[0];
+if(!file)return;
+const reader=new FileReader();
+reader.onload=function(e){
+document.getElementById("preview").innerHTML=
+`<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover;">`;
+};
+reader.readAsDataURL(file);
+});
+
+document.getElementById("regForm").addEventListener("submit",function(e){
+e.preventDefault();
+const age=parseInt(document.getElementById("age").value);
+const contact=document.getElementById("contact").value;
+const terms=document.getElementById("terms").checked;
+if(age<18)return alert("Must be 18+");
+if(!/^[0-9]+$/.test(contact))return alert("Numbers only");
+if(!terms)return alert("Accept terms");
+const id="VIS-"+Math.floor(Math.random()*100000);
+alert("Registration Successful! ID: "+id);
+this.reset();
+});
+
+</script>
+
+</body>
+</html>
